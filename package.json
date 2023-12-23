@@ -1,6 +1,6 @@
 {
-  "name": "tauri-boilerplate",
-  "version": "1.0.0",
+  "name": "people-manager",
+  "version": "0.0.1",
   "scripts": {
     "dev": "tauri dev",
     "start": "vite",
@@ -51,7 +51,7 @@
   "devDependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@rollup/plugin-inject": "^4.0.4",
-    "@tauri-apps/cli": "^1.0.0-rc.8",
+    "@tauri-apps/cli": "^1.5.9",
     "@types/node": "^18.7.15",
     "@types/react-dom": "^18.0.9",
     "@vitejs/plugin-react": "^1.0.7",

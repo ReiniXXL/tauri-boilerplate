@@ -1,7 +1,7 @@
 {
   "package": {
-    "productName": "Tauri Boilerplate",
-    "version": "1.0.0"
+    "productName": "People Manager",
+    "version": "0.0.1"
   },
   "build": {
     "distDir": "../build",
@@ -56,7 +56,7 @@
     },
     "windows": [
       {
-        "title": "Tauri Starter Boilerplate",
+        "title": "People Manager",
         "label": "main",
         "minWidth": 1280,
         "minHeight": 720,
