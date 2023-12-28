@@ -1,16 +1,12 @@
-import { defineConfig, splitVendorChunkPlugin  } from 'vite'
+import { defineConfig, splitVendorChunkPlugin } from "vite";
 import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfill";
-import react from '@vitejs/plugin-react'
-import inject from '@rollup/plugin-inject';
+import react from "@vitejs/plugin-react";
+import inject from "@rollup/plugin-inject";
 import nodePolyfills from "rollup-plugin-polyfill-node";
 
-const libraries = [
-  'react',
-  'react-router-dom',
-  'react-dom',
-];
+const libraries = ["react", "react-router-dom", "react-dom"];
 
-import { dependencies } from './package.json';
+import { dependencies } from "./package.json";
 function renderChunks(deps) {
   let chunks = {};
   Object.keys(deps).forEach((key) => {
@@ -23,7 +19,7 @@ function renderChunks(deps) {
 // https://vitejs.dev/config/
 export default defineConfig({
   base: "./",
-  assetsInclude: ['**/*.webp', '**/*.png', '**/*.jpg'],
+  assetsInclude: ["**/*.webp", "**/*.png", "**/*.jpg"],
   plugins: [react()],
   server: {
     port: 4590,
@@ -34,23 +30,23 @@ export default defineConfig({
   },
   clearScreen: false,
   resolve: {
-    alias: [{ find: '@', replacement: '/src' }],
+    alias: [{ find: "@", replacement: "/src" }],
     process: "process/browser",
     stream: "stream-browserify",
     zlib: "browserfiy-zlib",
     os: "os-browserify/browser",
     http: "stream-http",
-    assert: "assert"
+    assert: "assert",
   },
-  envPrefix: ['VITE_', 'TAURI_'],
+  envPrefix: ["VITE_", "TAURI_"],
   build: {
-    target: ['es2021', 'chrome100', 'safari13'],
+    target: ["es2021", "chrome100", "safari13"],
     sourcemap: false,
     rollupOptions: {
       plugins: [
-        inject({ Buffer: ['buffer', 'Buffer'] }),
+        inject({ Buffer: ["buffer", "Buffer"] }),
         nodePolyfills(),
-        splitVendorChunkPlugin()
+        splitVendorChunkPlugin(),
       ],
       output: {
         manualChunks: {
@@ -61,22 +57,22 @@ export default defineConfig({
     },
     commonjsOptions: {
       include: [/node_modules/],
-      transformMixedEsModules: true
+      transformMixedEsModules: true,
     },
-    outDir: 'build',
+    outDir: "build",
   },
   optimizeDeps: {
     exclude: [],
     esbuildOptions: {
       define: {
-        'global': "globalThis"
+        global: "globalThis",
       },
       plugins: [
         NodeGlobalsPolyfillPlugin({
           process: true,
           buffer: true,
         }),
-      ]
-    }
+      ],
+    },
   },
-})
+});

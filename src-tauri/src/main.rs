@@ -10,6 +10,14 @@ use tauri::{CustomMenuItem, SystemTray, SystemTrayMenu};
 use tauri_plugin_store::PluginBuilder;
 use tauri_plugin_window_state;
 use std::time::{SystemTime, UNIX_EPOCH};
+use rusqlite::{Connection,Result};
+
+#[derive(Debug)]
+struct Employee {
+    id: i32,
+    firstname: String,
+    lastname: String,
+}
 
 #[derive(Clone, serde::Serialize)]
 struct SingleInstancePayload {
@@ -44,6 +52,24 @@ fn main() {
     .add_item(quit)
     .add_native_item(SystemTrayMenuItem::Separator)
     .add_item(hide);
+
+  let conn = Connection::open("db/test.db");
+  
+  conn.expect("Error creating table employees").execute(
+    "create table if not exists employees (id integer primary key, firstname text not null, lastname text not null)",[],
+  );
+
+  let me = Employee {
+      id: 0,
+      firstname: "Max".to_string(),
+      lastname: "Mustermann".to_string(),
+  };
+  let conn = Connection::open("db/test.db");
+  conn.expect("Error creating table employees").execute(
+      "INSERT INTO employees (firstname, lastname) VALUES (?1,?2)",
+      (&me.firstname, &me.lastname),
+  ); 
+
 
   // main window should be invisible to allow either the setup delay or the plugin to show the window
   tauri::Builder::default()
@@ -107,4 +133,4 @@ fn main() {
     .plugin(PluginBuilder::default().build())
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
-}
+  }
