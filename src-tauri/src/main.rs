@@ -11,6 +11,7 @@ use tauri_plugin_store::PluginBuilder;
 use tauri_plugin_window_state;
 use std::time::{SystemTime, UNIX_EPOCH};
 use rusqlite::{Connection,Result};
+//use serde_json::{Result, Value};
 
 #[derive(Debug)]
 struct Employee {
@@ -45,6 +46,45 @@ async fn message_from_rust(window: tauri::Window) -> Result<CustomResponse, Stri
   })
 }
 
+#[tauri::command]
+fn employee_add(firstname: String, lastname: String) {
+  println!("Employee add was invoked from JS!");
+
+  let me = Employee {
+      id: 0,
+      firstname: firstname.to_string(),
+      lastname: lastname.to_string(),
+  };
+  let conn = Connection::open("db/test.db");
+  conn.expect("Error creating table employees").execute(
+      "INSERT INTO employees (firstname, lastname) VALUES (?1,?2)",
+      (&me.firstname, &me.lastname),
+  ); 
+}
+
+#[tauri::command]
+fn employee_getall() {
+  println!("Employee getall was invoked from JS!");
+/*   let conn = Connection::open("db/test.db");
+  let mut stmt = conn.prepare("SELECT id, firstname, lastname FROM employees")?;
+  let person_iter = stmt.query_map([], |row| {
+      Ok(Employee {
+          id: row.get(0)?,
+          firstname: row.get(1)?,
+          lastname: row.get(2)?,
+      })
+  })?;
+  
+
+  for person in person_iter {
+      println!("Found person {:?}", person.unwrap());
+  }
+let resp: String = "responce string".to_string();
+ 
+  resp.into()
+  */
+}
+
 fn main() {
   let quit = CustomMenuItem::new("quit".to_string(), "Quit");
   let hide = CustomMenuItem::new("hide".to_string(), "Hide");
@@ -58,17 +98,6 @@ fn main() {
   conn.expect("Error creating table employees").execute(
     "create table if not exists employees (id integer primary key, firstname text not null, lastname text not null)",[],
   );
-
-  let me = Employee {
-      id: 0,
-      firstname: "Max".to_string(),
-      lastname: "Mustermann".to_string(),
-  };
-  let conn = Connection::open("db/test.db");
-  conn.expect("Error creating table employees").execute(
-      "INSERT INTO employees (firstname, lastname) VALUES (?1,?2)",
-      (&me.firstname, &me.lastname),
-  ); 
 
 
   // main window should be invisible to allow either the setup delay or the plugin to show the window
@@ -120,7 +149,7 @@ fn main() {
       },
       _ => {}
     })
-    .invoke_handler(tauri::generate_handler![message_from_rust])
+    .invoke_handler(tauri::generate_handler![message_from_rust,employee_add,employee_getall])
     .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
       app
         .emit_all(

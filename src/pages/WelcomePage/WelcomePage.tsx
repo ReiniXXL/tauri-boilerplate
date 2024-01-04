@@ -1,8 +1,15 @@
 import React from "react";
 import { Box, Heading, Flex } from "@chakra-ui/react";
 import { Technology, TechStack } from "@/pages/WelcomePage/components";
+import { Button } from "@chakra-ui/react";
+import { invoke } from "@tauri-apps/api/tauri";
 
 const WelcomePage: React.FC = () => {
+  function handler_addemployee(e) {
+    invoke("employee_add", { firstname: "Ticki", lastname: "Micki" });
+    console.log("You clicked submit.");
+  }
+
   return (
     <Flex justifyContent="center" flexDirection="column" h="100%">
       <Box as="section" whiteSpace="nowrap" textAlign="center">
@@ -51,6 +58,10 @@ const WelcomePage: React.FC = () => {
           <Technology label="Meetings" image="technologies/chakra-ui.svg" />
           <Technology label="Surveys" image="technologies/chakra-ui.svg" />
           <Technology label="Documents" image="technologies/chakra-ui.svg" />
+        </TechStack>
+
+        <TechStack label="Test">
+          <Button onClick={handler_addemployee}>Add Employee</Button>
         </TechStack>
       </Box>
     </Flex>
