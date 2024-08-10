@@ -2,7 +2,7 @@ import { useAsteroidStore } from "@/stores/useAsteroidStore";
 import { Text, Button, HStack, VStack, Image } from "@chakra-ui/react";
 import React from "react";
 
-const ZustandPage = () => {
+const QuakPage = () => {
   const {
     asteroids,
     increaseAsteroids,
@@ -14,18 +14,16 @@ const ZustandPage = () => {
     <>
       <Image src="./src/assets/images/technologies/zustand.png" width="200px" />
       <VStack>
-        <Text>Asteroids: {asteroids}</Text>
+        <Text>Quak Asteroids: {asteroids}</Text>
 
         <HStack>
-          <Button onClick={() => increaseAsteroids()}>Add asteroid</Button>
-          <Button onClick={() => decreaseAsteroids()}>Remove asteroid</Button>
+          <Button onClick={() => increaseAsteroids()}>Add</Button>
+          <Button onClick={() => decreaseAsteroids()}>Remove</Button>
         </HStack>
-        <Button onClick={() => removeAllAsteroids()}>
-          Remove all Asteroids
-        </Button>
+        <Button onClick={() => removeAllAsteroids()}>Remove all</Button>
       </VStack>
     </>
   );
 };
 
-export default ZustandPage;
+export default QuakPage;
